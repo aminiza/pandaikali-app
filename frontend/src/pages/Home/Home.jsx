@@ -1,41 +1,24 @@
 import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import {io} from "socket.io-client";
 
-const socket = io("http://localhost:5000", {
-  transports: ["websocket", "polling"],
-});
-
-const Home = (setUser) => {
+const Home = ({setUser}) => {
   const [data, setData] = React.useState([]);
   
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/data")
-        const result = await response.json()
+    fetch("http://localhost:5000/data")
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
 
-        if (Array.isArray(result.sensorJarak)) {
-          setData(result.sensorJarak);
         } else {
-          console.error("Unexpected data format", result)
-          setData([]);
+          setData([])
         }
-  
-      } catch(error) {
-        console.log("Error fetching data:", error);
+        setData(data.sensorJarak);
+      }).catch((error) => {
+        console.error("Error fetching data:", error);
         setData([]);
-      }
-    };
+      });
 
-    fetchData();
-
-    socket.on("sensorUpdate", (newData) => {
-      setData(newData);
-    });
-        return () => {
-          socket.off("sensorUpdate");
-        }
   }, []);
 
   return (

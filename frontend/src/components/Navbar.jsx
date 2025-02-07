@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import Button from './button/Button';
 import { useNavigate, Link } from 'react-router-dom';
 
-const Navbar = (props) => {
+const Navbar = ({setUser}) => {
 
-    const {setUser} = props;
+    // console.log("navbar menerima setUser", setUser)
 
-    if(!setUser){
+    if(!setUser || typeof setUser !== 'function'){
         console.error("Error: setUser is not defined");
         return null;
     }
@@ -21,12 +21,19 @@ const Navbar = (props) => {
         {name: "History", link:"/history"}
     ];
     const handleLogout = async () => {
+        // console.log("Logout clicked");
         try {
             const response = await fetch('http://localhost:5000/logout', { method: 'POST', credentials: 'include' });
             
             if (response.ok) {
+                // console.log('Logout clear token');
                 localStorage.removeItem('token');
-                setUser(null);
+                if(setUser && typeof setUser === 'function'){
+                    setUser(null);
+                    // console.log('User set to null');
+                } else {
+                    console.error("Error: setUser is not a function");
+                }
                 navigate('/login');
             } else {
                 console.error('Logout failed');

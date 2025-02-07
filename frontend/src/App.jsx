@@ -3,7 +3,7 @@ import Login from "./pages/auth/login";
 import Home from "./pages/Home/Home"
 import Register from "./pages/auth/register";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar.jsx";
 import History from "./pages/Home/History";
 
 
@@ -15,9 +15,11 @@ function App() {
   useEffect(() => {
     const savedUser = localStorage.getItem('token');
     if (savedUser) {
+      // console.log("User ditemukan dilocalstorage", savedUser);
       setUser(JSON.parse(savedUser));
       setShowLogin(false);
     } else {
+      // console.log("User tidak ditemukan dilocalstorage");
       setShowLogin(true);
     }
   }, [])
@@ -33,21 +35,21 @@ function App() {
 
   return (
     <Router>
-      {user && <Navbar setUser={setUser} />}
+      {<Navbar setUser={setUser} />}
     <Routes>
       <Route path="/" element={
         <ProtectedRoute>
-          <Home />
+          <Home setUser={setUser} />
         </ProtectedRoute>
           } />
       <Route path="/dashboard" element={
         <ProtectedRoute>
-          <Home /> 
+          <Home setUser={setUser} /> 
         </ProtectedRoute>
         } />
       <Route path="/history" element={
         <ProtectedRoute>
-          <History /> 
+          <History setUser={setUser} /> 
         </ProtectedRoute>
         } />
       <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} setShowLogin={setShowLogin} /> }/>

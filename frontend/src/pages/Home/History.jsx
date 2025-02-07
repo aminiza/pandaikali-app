@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Button from "../../components/button/Button";
 
-const History = ( setUser ) => {
+const History = ({ setUser }) => {
   const [historyData, setHistoryData] = useState([]);
   const [error, setError] = useState(null);
 
@@ -25,9 +25,12 @@ const History = ( setUser ) => {
         setHistoryData(data.HistorySensorJarak);
 
         //simpan ke localStorage sebagai cache
-        localStorage.setItem("historyData", JSON.stringify(data.HistorySensorJarak));
+        localStorage.setItem(
+          "historyData",
+          JSON.stringify(data.HistorySensorJarak)
+        );
       } catch (error) {
-        setError(error.message)
+        setError(error.message);
         console.log("Error fetching data:", error.message);
 
         //get cache jika ada
@@ -59,9 +62,7 @@ const History = ( setUser ) => {
         <h1 className="text-2xl font-semibold mb-4">History Monitoring</h1>
 
         {error && (
-            <div className="text-red-500 mb-4">
-                Error Handling: {error}
-            </div>
+          <div className="text-red-500 mb-4">Error Handling: {error}</div>
         )}
 
         <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4">

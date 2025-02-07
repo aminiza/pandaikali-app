@@ -3,6 +3,7 @@ import SensorJarak from "../models/modelSensor.js";
 export const getSensorJarak = async (req, res) => {
     try {
         const sensorJarak = await SensorJarak.findAll();
+
         res.status(200).json({message: "Success get data", sensorJarak});
     } catch (error) {
         res.status(500).json({message: "Terjadi kesalahan server", error: error.message});
