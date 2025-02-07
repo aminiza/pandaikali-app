@@ -9,6 +9,7 @@ import SensorRoute from "./routes/SensorRoute.js";
 import {logout} from "./controllers/Users.js";
 import { Server } from "socket.io";
 import SensorJarak from "./models/modelSensor.js";
+import { getSensorJarak } from "./controllers/SensorJarak.js";
 dotenv.config();
 
 const app = express();
@@ -39,31 +40,31 @@ app.use(UserRoute);
 app.use(SensorRoute);
 app.post('/logout', logout);
 
-let sensorData = [];
-
-setInterval( async() => {
-    try {
-        const sensorJarak = await SensorJarak.findAll();
-    
-        if (sensorJarak && sensorJarak.length > 0) {
-            const newData = sensorJarak[sensorJarak.length - 1];
-            io.emit('sensorUpdate', newData);
-        }
-    } catch (error) {
-        console.error("Error saving data", error);
-    }
-}, 5000);
-
-io.on('connection', (socket) => {
+io.on('connection', async(socket) => {
     console.log("User connected", socket.id);
 
-    //kirim data awal saat client terhubung
-    socket.emit("initialData", sensorData);
+    try {
+        const sensorData = await getSensorJarak();
+        socket.emit("initialData", sensorData);
+    } catch (error) {
+        console.error("Error fetching data", error);
+    }
 
     socket.on("disconnect", () => {
         console.log("User disconnected", socket.id);
-    })
-})
+    });
+});
+
+
+setInterval( async() => {
+    try {
+        const sensorData = await getSensorJarak();
+            io.emit('sensorUpdate', sensorData);
+    } catch (error) {
+        console.error("Error fetching sensor data", error);
+    }
+}, 5000);
+
 
 // const syncDatabase = async() => {
 //     try {
@@ -85,4 +86,4 @@ io.on('connection', (socket) => {
 //     }
 // })();
 
-app.listen(process.env.APP_PORT, () => console.log("Server up and running..."));
+server.listen(process.env.APP_PORT, () => console.log("Server up and running..."));

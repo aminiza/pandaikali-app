@@ -21,10 +21,19 @@ const Navbar = (props) => {
         {name: "History", link:"/history"}
     ];
     const handleLogout = async () => {
-        await fetch('http://localhost:5000/logout', { method: 'POST', credentials: 'include' });
-        localStorage.removeItem('token');
-        setUser(null);
-        navigate('/login');
+        try {
+            const response = await fetch('http://localhost:5000/logout', { method: 'POST', credentials: 'include' });
+            
+            if (response.ok) {
+                localStorage.removeItem('token');
+                setUser(null);
+                navigate('/login');
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error saat logout:', error);
+        }
     }
 
   return (

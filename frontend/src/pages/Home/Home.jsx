@@ -8,30 +8,34 @@ const socket = io("http://localhost:5000", {
 
 const Home = (setUser) => {
   const [data, setData] = React.useState([]);
-
+  
   useEffect(() => {
-    fetch("http://localhost:5000/data")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data.sensorJarak)) {
-          setData(data.sensorJarak);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/data")
+        const result = await response.json()
+
+        if (Array.isArray(result.sensorJarak)) {
+          setData(result.sensorJarak);
         } else {
+          console.error("Unexpected data format", result)
           setData([]);
         }
-      })
-      .catch((error) => {
+  
+      } catch(error) {
         console.log("Error fetching data:", error);
         setData([]);
-      });
-
-      //websocket lisetener to update realtime
-      socket.on("sensorUpdate", (newData) => {
-        setData((prevData) => [...prevData, newData]);
-      });
-
-      return () => {
-        socket.off("sensorUpdate");
       }
+    };
+
+    fetchData();
+
+    socket.on("sensorUpdate", (newData) => {
+      setData(newData);
+    });
+        return () => {
+          socket.off("sensorUpdate");
+        }
   }, []);
 
   return (
