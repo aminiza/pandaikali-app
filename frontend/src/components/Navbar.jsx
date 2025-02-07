@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Button from './Button/Button'
+import Button from './button/Button';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Navbar = (props) => {
