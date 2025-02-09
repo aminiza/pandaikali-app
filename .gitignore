@@ -5,7 +5,9 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
-.vite/deps
+.vite/
+
+database/
 
 #Logs
 *.log

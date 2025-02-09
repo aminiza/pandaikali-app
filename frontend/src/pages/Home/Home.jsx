@@ -25,8 +25,9 @@ const Home = ({setUser}) => {
     <>
       <Navbar setUser={setUser} />
       <div className="p-4 mt-20">
-        <h1 className="text-xl font-semibold mb-4">Monitoring Debit Air</h1>
-        <table className="w-full border-collapse border border-gray-300">
+        <h1 className="text-xl font-semibold mb-4 text-center">Monitoring Debit Air</h1>
+        <div className="overflow-x-auto flex items-center justify-center">
+        <table className="w-3/4 border-collapse border border-gray-300 items-center">
           <thead>
             <tr className="bg-gray-200">
               <th className="border p-2">No.</th>
@@ -60,6 +61,7 @@ const Home = ({setUser}) => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );
