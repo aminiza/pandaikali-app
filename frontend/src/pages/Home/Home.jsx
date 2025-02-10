@@ -1,25 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
+import Button from "../../components/button/Button";
+import PaginateButton from "../../components/button/PaginateButton";
 
 const Home = ({setUser}) => {
   const [data, setData] = React.useState([]);
-  
+  const [isLoading, setIsLoading] = useState(true);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 5;
+
   useEffect(() => {
     fetch("http://localhost:5000/data")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
-
         } else {
           setData([])
         }
-        setData(data.sensorJarak);
+        setData(data.sensorJarak) || [];
       }).catch((error) => {
         console.error("Error fetching data:", error);
         setData([]);
       });
 
   }, []);
+
+  // const indexOfLastItem = currentPage * itemsPerPage;
+  // const indexFirstItem = indexOfLastItem - itemsPerPage;
+  // const currentData = data.slice(indexFirstItem, indexOfLastItem);
+
+  // const totalPage  = Math.ceil(data.length / itemsPerPage);
+
+  // const handlePageChange = (pageNumber) => {
+  //   setCurrentPage(pageNumber)
+  // }
 
   return (
     <>
@@ -62,6 +76,29 @@ const Home = ({setUser}) => {
           </tbody>
         </table>
         </div>
+
+        {/* <div className="flex justify-center mt-4">
+            <nav>
+              <ul className="flex space-x-2">
+                {Array.from({length: totalPage}, (_, index) => (
+                  <li key={index}>
+                    <Button 
+                    onClick={() => handlePageChange(index+1)}
+                    className={`px-2 py-1.5 border rounded text-xs ${
+                      currentPage === index + 1 ? "bg-blue-500 text-white" :
+                      "bg-white text-blue-500"
+                    }`}
+                    >
+                      {index + 1}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+        </div>
+            <div>
+              <PaginateButton />
+            </div> */}
       </div>
     </>
   );
