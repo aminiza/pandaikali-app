@@ -1,17 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import .meta.env.VITE_APP_BASE_URL || "http://localhost:5000";
+
+
 const Login = ({ setUser, setShowLogin }) => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -25,10 +31,13 @@ const Login = ({ setUser, setShowLogin }) => {
         setUser(data.user);
         localStorage.setItem('token', JSON.stringify(data.user));
         setUser(data.user);
+        setShowLogin(false);
         navigate('/dashboard');
       } else {
         setError(data.message);
       }
+  
+      setIsLoading(false);
   
     } catch (error) {
       console.error("Login gagal:", error.message);
@@ -49,7 +58,7 @@ const Login = ({ setUser, setShowLogin }) => {
           className="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md"
         >
           <p className="mb-5 text-3xl uppercase text-gray-600">Login</p>
-          {error && <p className="text-red-600">{error}</p>}
+          {error && <p className="text-red-600 mb-2">{error}</p>}
           <input
             type="text"
             name="username"
@@ -75,7 +84,7 @@ const Login = ({ setUser, setShowLogin }) => {
             id="login"
             type="submit"
           >
-            <span>Login</span>
+            <span>{isLoading ? "Loading..." : "Login"}</span>
           </button>
           <p className="text-sm mt-2">Belum punya akun? <span onClick={handleRegister} className="text-blue-500 cursor-pointer">Daftar</span></p>
         </form>

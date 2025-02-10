@@ -10,6 +10,9 @@ dotenv.config();
 
 const app = express();
 
+const PORT = process.env.APP_PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -21,7 +24,7 @@ app.use(session({
 
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: FRONTEND_URL
 }));
 app.use(express.json());
 
@@ -49,4 +52,4 @@ app.post('/logout', logout);
 //     }
 // })();
 
-app.listen(process.env.APP_PORT, () => console.log("Server up and running..."));
+app.listen(PORT, () => console.log("Server up and running..."));

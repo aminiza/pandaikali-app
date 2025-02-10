@@ -3,6 +3,8 @@ import Navbar from "../../components/Navbar";
 import Button from "../../components/button/Button";
 import PaginateButton from "../../components/button/PaginateButton";
 
+const API_URL = import.meta.env.VITE_APP_BASE_URL || "http://localhost:5000";
+
 const Home = ({setUser}) => {
   const [data, setData] = React.useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -10,7 +12,7 @@ const Home = ({setUser}) => {
   // const itemsPerPage = 5;
 
   useEffect(() => {
-    fetch("http://localhost:5000/data")
+  fetch(`${API_URL}/data`)
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Button from "../../components/button/Button";
 
+const API_URL = import .meta.env.VITE_APP_BASE_URL || "http://localhost:5000";
+
+
 const History = ({ setUser }) => {
   const [historyData, setHistoryData] = useState([]);
   const [error, setError] = useState(null);
@@ -9,7 +12,7 @@ const History = ({ setUser }) => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch("http://localhost:5000/history", {
+        const response = await fetch(`${API_URL}/history`, {
           method: "GET",
           credentials: "include",
         });
