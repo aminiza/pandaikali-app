@@ -11,7 +11,6 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.APP_PORT || 5000;
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -24,7 +23,9 @@ app.use(session({
 
 app.use(cors({
     credentials: true,
-    origin: FRONTEND_URL
+    origin: process.env.FRONTEND_URL || 'http://pandaikali.aditamaworks.id',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
